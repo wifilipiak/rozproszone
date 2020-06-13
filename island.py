@@ -3,10 +3,7 @@
 
 """
 import random
-import array
 import threading
-import time
-import numpy
 from result import AlgResult
 from params import AlgParams
 from deap import algorithms
