@@ -55,12 +55,16 @@ class Master(threading.Thread):
         points = json_data["Display data"]
         xs = [x[1] for x in points]
         ys = [y[2] for y in points]
+        index = [i[0] for i in points]
         optimal_tour = [x - 1 for x in json_data["OptTour"]]
         fig, ax = plt.subplots(2, sharex=True, sharey=True)
         ax[0].set_title('Our route')
         ax[1].set_title('Best known route')
-        ax[0].scatter(xs, ys)
-        ax[1].scatter(xs, ys)
+        ax[0].scatter(xs, ys, color='orange')
+        ax[1].scatter(xs, ys, color='orange')
+        for i in range(len(index)):
+            ax[0].annotate(index[i], (xs[i] + 10, ys[i] + 10))
+            ax[1].annotate(index[i], (xs[i] + 10, ys[i] + 10))
         text_our = f'Route: {[x + 1 for x in self.best["Route"]]} \nLength: {self.best["Value"]}'
         text_opt = f'Route: {json_data["OptTour"]} \nLength: {json_data["OptDistance"]}'
         plt.subplots_adjust(hspace=0.5)
@@ -69,13 +73,13 @@ class Master(threading.Thread):
         for i in range(len(self.best['Route'])):
             start = (points[self.best['Route'][i-1]][1], points[self.best['Route'][i-1]][2])
             end = (points[self.best['Route'][i]][1], points[self.best['Route'][i]][2])
-            ax[0].annotate("", end, start,arrowprops=dict(arrowstyle="->"))
-        ax[0].scatter(points[self.best['Route'][0]][1], points[self.best['Route'][0]][2])
+            ax[0].annotate('', end, start, arrowprops=dict(arrowstyle="->", alpha=0.3))
+        ax[0].scatter(points[self.best['Route'][0]][1], points[self.best['Route'][0]][2], color='red')
         for i in range(len(self.best['Route'])):
             start = (points[optimal_tour[i-1]][1], points[optimal_tour[i-1]][2])
             end = (points[optimal_tour[i]][1], points[optimal_tour[i]][2])
-            ax[1].annotate("", end, start,arrowprops=dict(arrowstyle="->"))
-        ax[1].scatter(points[optimal_tour[0]][1], points[optimal_tour[0]][2])
+            ax[1].annotate("", end, start, arrowprops=dict(arrowstyle="->", alpha=0.3))
+        ax[1].scatter(points[optimal_tour[0]][1], points[optimal_tour[0]][2], color='red')
         plt.show()
 
 

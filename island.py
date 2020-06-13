@@ -46,7 +46,7 @@ class Island(threading.Thread):
         self.toolbox.register("select", self.alg_params.selection_method, tournsize=self.alg_params.selection_size)
         self.toolbox.register("evaluate", evalTSP, distance_map=self.distance_map)
         # Init random numbers generator with given seed (used in population generator)
-        random.seed(169)
+        random.seed(111)
         # Create population - list of Individual objects
         self.population = self.toolbox.population(n=self.pop_size)
         # Evaluate population
