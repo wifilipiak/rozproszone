@@ -24,7 +24,6 @@ class AlgResult():
             self.hof.update(population)
             # Run registered functions on pop
             self.stats.compile(population)
-            # Change route format from <0,28> to <1,29> to match with json file
             self.best_route = self.hof[0].tolist()
             #[x + 1 for x in self.hof[0].tolist()]
         else:
