@@ -10,15 +10,15 @@ class AlgParams:
     def __init__(self):
         self.pop_size = 200
         self.iterations = 500
-        self.mating_probability = round(random.uniform(0.5, 0.9), 2)                   #original = 0.7
+        self.mating_probability = round(random.uniform(0, 1), 2)                   #original = 0.7
         self.mating_method = tools.cxPartialyMatched
-        self.mutation_probability = round(random.uniform(0.1, 0.5), 2)                #original = 0.3
-        self.shuffle_probability = round(random.uniform(0.03, 0.07), 3)     #original = 0.05
+        self.mutation_probability = round(random.uniform(0, 1), 2)                #original = 0.3
+        self.shuffle_probability = round(random.uniform(0, 0.2), 3)     #original = 0.05
         self.mutation_method = tools.mutShuffleIndexes
-        self.selection_size = random.randint(2, 5)              #original = 3
+        self.selection_size = random.randint(2, 10)              #original = 3
         self.selection_method = tools.selTournament
         self.migration_rate = 20
-        self.migration_size = 20
+        self.migration_size = 10
 
     def get_params(self):
         params = {'Mating': self.mating_probability, 'Mutation': self.mutation_probability,

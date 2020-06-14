@@ -50,7 +50,7 @@ class Master(threading.Thread):
         for island in self.islands_list:
             results.append({'Route': island.results.best_route, 'Value': island.results.hof[0].fitness.values[0]})
         self.best = min(results, key=lambda x: x['Value'])
-        return self.best
+        print(f'Best route: {[x + 1 for x in self.best["Route"]]} \nLength: {self.best["Value"]}\n')
 
     def plot_results(self):
         # Prepare data
@@ -97,7 +97,11 @@ if __name__ == "__main__":
     master.start_all()
     master.join_all()
     master.get_results()
-    master.plot_results()
+    if 'Display data' in json_data:
+        print("Display data exists - results will be plotted.")
+        master.plot_results()
+    else:
+        print("Display data doesn't exist - results won't be plotted.")
 
 
 

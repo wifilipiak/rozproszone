@@ -25,6 +25,5 @@ class AlgResult():
             # Run registered functions on pop
             self.stats.compile(population)
             self.best_route = self.hof[0].tolist()
-            #[x + 1 for x in self.hof[0].tolist()]
         else:
             pass

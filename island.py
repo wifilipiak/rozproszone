@@ -48,7 +48,7 @@ class Island(threading.Thread):
         # Add methods to toolbox
         self.toolbox.register("mate", self.alg_params.mating_method)
         self.toolbox.register("mutate", self.alg_params.mutation_method, indpb=self.alg_params.shuffle_probability)
-        self.toolbox.register("select", self.alg_params.selection_method, self.alg_params.selection_size)
+        self.toolbox.register("select", self.alg_params.selection_method, tournsize=self.alg_params.selection_size)
         self.toolbox.register("evaluate", evalTSP, distance_map=self.distance_map)
         # Create population - list of Individual objects
         self.population = self.toolbox.population(n=self.pop_size)
@@ -58,7 +58,7 @@ class Island(threading.Thread):
 
     def migrate(self):
         # Send your emigrants and parameters to queue_out
-        emigrants = tools.selBest(self.population, self.alg_params.migration_size)
+        emigrants = tools.selBest(self.population, self.alg_params.migration_size, fit_attr="fitness")
         self.q_out.put(emigrants)
         self.q_out.put(self.alg_params.get_params())
         # Get immigrant and foreign parameters from queue_in
@@ -81,7 +81,9 @@ class Island(threading.Thread):
 
     def start_optimization(self):
         for i in range(1, self.alg_params.iterations):
-            self.population = algorithms.varAnd(self.population, self.toolbox, self.alg_params.mating_probability
+            pop = self.population
+            pop = self.toolbox.select(pop, len(pop))
+            self.population = algorithms.varAnd(pop, self.toolbox, self.alg_params.mating_probability
                                                 , self.alg_params.mutation_probability)
             invalid_ind = [ind for ind in self.population if not ind.fitness.valid]
             for ind in invalid_ind:
@@ -89,7 +91,7 @@ class Island(threading.Thread):
             self.update_results()
             if i % self.alg_params.migration_rate == 0 and i > 0:
                 self.migrate()
-        print(f'Island {self.id} done\n')
+        print(f'Island {self.id}: Done\n')
 
     def update_results(self):
         self.results.update(self.population)
@@ -100,7 +102,7 @@ class Island(threading.Thread):
         toolbox.unregister("select")
         toolbox.register("mate", self.alg_params.mating_method)
         toolbox.register("mutate", self.alg_params.mutation_method, indpb=self.alg_params.shuffle_probability)
-        toolbox.register("select", self.alg_params.selection_method, self.alg_params.selection_size)
+        toolbox.register("select", self.alg_params.selection_method, tournsize=self.alg_params.selection_size)
         return toolbox
 
 
